@@ -1,4 +1,4 @@
-# Ergo
+# ergo
 
 A minimal status bar for Wayland compositors.
 
@@ -23,8 +23,8 @@ while true; do echo $(date +%R); sleep 5; done | ergo -rN '3f3f3f'
 echo " some ^ awesome ^ text " | ergo
 ```
 
-![example](example0.png)
-![example](example1.png)
+![example](public/example0.png)
+![example](public/example1.png)
 
 ## Thanks
 

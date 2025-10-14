@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <wayland-client.h>
 #include <unistd.h>
@@ -68,6 +70,12 @@ void
 wayland_init(struct state *state)
 {
 	state->wl_display = wl_display_connect(NULL);
+
+	if (!state->wl_display) {
+		fprintf(stderr, "Failed to connect to display.\n");
+		exit(EXIT_FAILURE);
+	}
+	
 	state->wl_registry = wl_display_get_registry(state->wl_display);
 	wl_registry_add_listener(state->wl_registry, &wl_registry_listener, state);
 	wl_display_roundtrip(state->wl_display);

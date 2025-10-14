@@ -1,4 +1,2 @@
 .gitattributes export-ignroe
-.gitignore export-ignore
-example0.png export-ignore
-example1.png export-ignore
+public export-ignore

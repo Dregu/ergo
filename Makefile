@@ -1,6 +1,7 @@
 CC ?= cc
 PREFIX ?= /usr/local
 BIN ?= ergo
+VERSION ?= 0.0.5
 
 CFLAGS += $(shell pkg-config --cflags wayland-client cairo pangocairo) \
 	-Wall -Wextra -Wno-unused-parameter
@@ -41,4 +42,7 @@ install: all
 uninstall:
 	rm -f $(PREFIX)/bin/$(BIN)
 
-.PHONY: all clean install uninstall
+archive:
+	git archive --format=tar.gz --prefix=ergo-$(VERSION)/ -o ergo-$(VERSION).tar.gz HEAD
+
+.PHONY: all clean install uninstall archive

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+font="JetBrains Mono 14"
+
+while true; do
+	workspaces=" 1 ^ 2 ^ 3  4  5 " # TODO: get active workspaces from compositor
+	bat=$(cat /sys/class/power_supply/BAT0/capacity)
+	timestamp=$(date +%R)
+	margin="$(printf "%*s" $((131 - ${#timestamp} - ${#bat})))"
+	echo "${workspaces}^ ergo is running ${margin} ^  BAT ${bat} | ${timestamp}"
+	sleep 10
+done | ergo -f "$font"

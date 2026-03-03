@@ -48,8 +48,11 @@ static bool parse_color(const char* color, uint32_t* result)
 
 void parse_input(struct state* state, char* input)
 {
-    int col = input[0] - '0';
-
+    int col = input[0] - '0' - 1;
+    if (col < 0)
+        col = 0;
+    else if (col > 8)
+        col = 8;
     int length = strlen(input);
     if (input[length - 1] == '\n')
         input[length - 1] = '\0';
@@ -59,14 +62,16 @@ void parse_input(struct state* state, char* input)
 struct state* state_init(int argc, char* argv[])
 {
     struct state* state = malloc(sizeof(struct state));
-    state->font = "monospace 16";
-    state->normal_bg = state->select_fg = 0x000000ff;
+    state->font = "monospace 11";
+    state->normal_bg = state->select_fg = 0x00000000;
     state->normal_fg = state->select_bg = 0xffffffff;
     state->anchor = ZWLR_LAYER_SURFACE_V1_ANCHOR_TOP;
     state->exclusive = false;
-    const char* usage = "Usage: ergo [-be] [-f font] [-N color] [-n color] [-S color] [-s color]\n";
+    state->cols = 3;
+    state->layer = ZWLR_LAYER_SHELL_V1_LAYER_TOP;
+    const char* usage = "Usage: ergo [-beo] [-l layer 0..3] [-c ncolumns 1..9] [-f font] [-N color] [-n color] [-S color] [-s color]\n";
     int opt;
-    while ((opt = getopt(argc, argv, "hbrf:N:n:S:s:")) != -1)
+    while ((opt = getopt(argc, argv, "hbeof:N:n:S:s:c:l:")) != -1)
     {
         switch (opt)
         {
@@ -81,6 +86,20 @@ struct state* state_init(int argc, char* argv[])
             break;
         case 'o':
             state->output = true;
+            break;
+        case 'c':
+            state->cols = optarg[0] - '0';
+            if (state->cols < 1)
+                state->cols = 1;
+            else if (state->cols > 9)
+                state->cols = 9;
+            break;
+        case 'l':
+            state->layer = optarg[0] - '0';
+            if (state->layer < 0)
+                state->layer = 0;
+            else if (state->layer > 3)
+                state->layer = 3;
             break;
         case 'N':
             if (!parse_color(optarg, &state->normal_bg))

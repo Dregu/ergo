@@ -33,7 +33,7 @@ void render(void* data, struct state* state)
     pango_layout_set_font_description(layout, desc);
     pango_font_description_free(desc);
 
-    for (int col = 0; col <= 2; col++)
+    for (int col = 0; col < state->cols; col++)
     {
         int width = 0;
         int height;
@@ -44,9 +44,9 @@ void render(void* data, struct state* state)
         pango_layout_set_text(layout, plain_text, -1);
         pango_layout_get_pixel_size(layout, &width, &height);
         int x = 4;
-        if (col == 1)
-            x = (state->width - width) / 2;
-        else if (col == 2)
+        if (col >= 1 && col < state->cols - 1)
+            x = (state->width - width) / (state->cols - 1);
+        else if (col == state->cols - 1)
             x = state->width - width - x;
         cairo_move_to(cairo, x, (state->height - height) / 2);
         pango_cairo_show_layout(cairo, layout);

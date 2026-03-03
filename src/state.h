@@ -19,10 +19,12 @@ struct state
     int width, height;
     uint32_t normal_bg, normal_fg, select_bg, select_fg;
     char* font;
-    char items[3][BUFSIZ * 10];
+    char items[9][BUFSIZ * 10];
     int anchor;
     bool exclusive;
     bool output;
+    int cols;
+    int layer;
 };
 
 struct state* state_init(int argc, char* argv[]);

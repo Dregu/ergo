@@ -3,6 +3,6 @@
 
 #include "state.h"
 
-void render(void *data, struct state *state);
+void render(void* data, struct state* state);
 
 #endif

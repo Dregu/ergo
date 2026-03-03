@@ -26,6 +26,6 @@ struct state
 };
 
 struct state* state_init(int argc, char* argv[]);
-void parse_input(struct state* state, char* input, int col);
+void parse_input(struct state* state, char* input);
 
 #endif

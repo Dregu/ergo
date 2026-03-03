@@ -92,7 +92,7 @@ wayland_init(struct state *state)
 		ZWLR_LAYER_SURFACE_V1_ANCHOR_LEFT | ZWLR_LAYER_SURFACE_V1_ANCHOR_RIGHT | state->anchor
 	);
 	zwlr_layer_surface_v1_set_size(state->zwlr_layer_surface_v1, state->width, state->height);
-	zwlr_layer_surface_v1_set_exclusive_zone(state->zwlr_layer_surface_v1, state->height);
+	zwlr_layer_surface_v1_set_exclusive_zone(state->zwlr_layer_surface_v1, state->exclusive ? state->height : -1);
 	zwlr_layer_surface_v1_add_listener(state->zwlr_layer_surface_v1, &zwlr_layer_surface_v1_listener, state);
 
 	wl_surface_commit(state->wl_surface);

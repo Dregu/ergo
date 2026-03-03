@@ -15,16 +15,15 @@ struct state {
 	struct zwlr_layer_shell_v1 *zwlr_layer_shell_v1;
 	struct zwlr_layer_surface_v1 *zwlr_layer_surface_v1;
 
-	bool right;
 	int width, height;
 	uint32_t normal_bg, normal_fg, select_bg, select_fg;
 	char *font;
-	char *items[BUFSIZ];
-	int item_count;
+	char items[2][BUFSIZ];
 	int anchor;
+    bool exclusive;
 };
 
 struct state *state_init(int argc, char *argv[]);
-void parse_input(struct state *state, char *input);
+void parse_input(struct state *state, char *input, bool right);
 
 #endif

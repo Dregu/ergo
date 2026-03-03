@@ -45,27 +45,8 @@ parse_color(const char *color, uint32_t *result)
 	return true;
 }
 
-void parse_input(struct state *state, char *input) {
-	int i = 0;
-	char *ptr, *exc;
-	state->items[i] = ptr = input;
-
-	int length = strlen(input);
-	if (input[length - 1] == '\n')
-		input[length - 1] = '\0';
-
-	while ((ptr = strchr(ptr, '^'))) {
-		if ((exc = ptr - 1)[0] == '\\') {
-		  memmove(exc, ptr, &input[length - 1] - exc);
-		  length--;
-		} else {
-		  *ptr = '\0';
-		  ptr++;
-		  i++;
-		  state->items[i] = ptr;
-		}
-	}
-	state->item_count = i + 1;
+void parse_input(struct state *state, char *input, bool right) {
+    memmove(state->items[right], input, strlen(input));
 }
 
 struct state *
@@ -75,20 +56,19 @@ state_init(int argc, char *argv[]) {
 	state->normal_bg = state->select_fg = 0x000000ff;
 	state->normal_fg = state->select_bg = 0xffffffff;
 	state->anchor = ZWLR_LAYER_SURFACE_V1_ANCHOR_TOP;
-	state->right = false;
-	state->item_count = 0;
+    state->exclusive = false;
 	const char *usage = "Usage: ergo [-br] [-f font] [-N color] [-n color] [-S color] [-s color]\n";
 	int opt;
 	while ((opt = getopt(argc, argv, "hbrf:N:n:S:s:")) != -1) {
 		switch (opt) {
-			case 'r':
-				state->right = true;
-				break;
 			case 'b':
 				state->anchor = ZWLR_LAYER_SURFACE_V1_ANCHOR_BOTTOM;
 				break;
 			case 'f':
 				state->font = optarg;
+				break;
+			case 'e':
+				state->exclusive = true;
 				break;
 			case 'N':
 				if (!parse_color(optarg, &state->normal_bg)) {

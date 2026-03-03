@@ -18,7 +18,7 @@ struct state {
 	int width, height;
 	uint32_t normal_bg, normal_fg, select_bg, select_fg;
 	char *font;
-	char items[3][BUFSIZ];
+	char items[3][BUFSIZ*10];
 	int anchor;
     bool exclusive;
     bool output;

@@ -51,18 +51,16 @@ void render(void *data, struct state *state)
         int height;
         char* plain_text = NULL;
         PangoAttrList* attr_list = NULL;
-        
         pango_parse_markup(state->items[col], -1, 0, &attr_list, &plain_text, NULL, NULL);
         pango_layout_set_attributes(layout, attr_list);
         pango_layout_set_text(layout, plain_text, -1);
         pango_layout_get_pixel_size(layout, &width, &height);
-        int x = 0;
+        int x = 4;
         if (col == 1)
             x = (state->width - width) / 2;
         else if (col == 2)
-            x = state->width - width;
-
-        cairo_move_to(cairo, x, 0);
+            x = state->width - width - x;
+        cairo_move_to(cairo, x, (state->height-height)/2);
         pango_cairo_show_layout(cairo, layout);
     }
 

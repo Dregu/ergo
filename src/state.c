@@ -57,7 +57,7 @@ state_init(int argc, char *argv[]) {
 	state->normal_fg = state->select_bg = 0xffffffff;
 	state->anchor = ZWLR_LAYER_SURFACE_V1_ANCHOR_TOP;
     state->exclusive = false;
-	const char *usage = "Usage: ergo [-br] [-f font] [-N color] [-n color] [-S color] [-s color]\n";
+	const char *usage = "Usage: ergo [-be] [-f font] [-N color] [-n color] [-S color] [-s color]\n";
 	int opt;
 	while ((opt = getopt(argc, argv, "hbrf:N:n:S:s:")) != -1) {
 		switch (opt) {
@@ -69,6 +69,9 @@ state_init(int argc, char *argv[]) {
 				break;
 			case 'e':
 				state->exclusive = true;
+				break;
+			case 'o':
+				state->output = true;
 				break;
 			case 'N':
 				if (!parse_color(optarg, &state->normal_bg)) {

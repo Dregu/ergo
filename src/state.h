@@ -21,6 +21,7 @@ struct state {
 	char items[2][BUFSIZ];
 	int anchor;
     bool exclusive;
+    bool output;
 };
 
 struct state *state_init(int argc, char *argv[]);

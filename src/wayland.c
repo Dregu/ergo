@@ -84,7 +84,7 @@ wayland_init(struct state *state)
 	state->zwlr_layer_surface_v1 = zwlr_layer_shell_v1_get_layer_surface(
 		state->zwlr_layer_shell_v1,
 		state->wl_surface,
-		state->wl_output,
+		state->output ? state->wl_output : NULL,
 		ZWLR_LAYER_SHELL_V1_LAYER_TOP,
 		"ergo"
 	);

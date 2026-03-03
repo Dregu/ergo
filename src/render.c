@@ -16,9 +16,14 @@ cairo_set_source_u32(cairo_t *cairo, uint32_t color) {
 	);
 }
 
+gboolean no_color(PangoAttribute *a, void*)
+{
+    if (a->klass->type == PANGO_ATTR_FOREGROUND || a->klass->type == PANGO_ATTR_FOREGROUND_ALPHA)
+        return false;
+    return true;
+}
 
-void
-render(void *data, struct state *state)
+void render(void *data, struct state *state)
 {
 	int stride = state->width * 4;
 
@@ -46,17 +51,12 @@ render(void *data, struct state *state)
         int height;
         char* plain_text = NULL;
         PangoAttrList* attr_list = NULL;
+        
         pango_parse_markup(state->items[side], -1, 0, &attr_list, &plain_text, NULL, NULL);
         pango_layout_set_attributes(layout, attr_list);
         pango_layout_set_text(layout, plain_text, -1);
         pango_layout_get_pixel_size(layout, &width, &height);
-        
-        int x;
-        if (side)
-            x = state->width - width;
-        else
-            x = 0;
-        cairo_move_to(cairo, x, 0);
+        cairo_move_to(cairo, side ? state->width - width : 0, 0);
         pango_cairo_show_layout(cairo, layout);
     }
 

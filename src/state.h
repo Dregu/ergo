@@ -18,13 +18,13 @@ struct state {
 	int width, height;
 	uint32_t normal_bg, normal_fg, select_bg, select_fg;
 	char *font;
-	char items[2][BUFSIZ];
+	char items[3][BUFSIZ];
 	int anchor;
     bool exclusive;
     bool output;
 };
 
 struct state *state_init(int argc, char *argv[]);
-void parse_input(struct state *state, char *input, bool right);
+void parse_input(struct state *state, char *input, int col);
 
 #endif

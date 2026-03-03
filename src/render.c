@@ -46,17 +46,23 @@ void render(void *data, struct state *state)
 	pango_layout_set_font_description(layout, desc);
 	pango_font_description_free(desc);
 
-    for (int side = 0; side <= 1; side++) {
+    for (int col = 0; col <= 2; col++) {
         int width = 0;
         int height;
         char* plain_text = NULL;
         PangoAttrList* attr_list = NULL;
         
-        pango_parse_markup(state->items[side], -1, 0, &attr_list, &plain_text, NULL, NULL);
+        pango_parse_markup(state->items[col], -1, 0, &attr_list, &plain_text, NULL, NULL);
         pango_layout_set_attributes(layout, attr_list);
         pango_layout_set_text(layout, plain_text, -1);
         pango_layout_get_pixel_size(layout, &width, &height);
-        cairo_move_to(cairo, side ? state->width - width : 0, 0);
+        int x = 0;
+        if (col == 1)
+            x = (state->width - width) / 2;
+        else if (col == 2)
+            x = state->width - width;
+
+        cairo_move_to(cairo, x, 0);
         pango_cairo_show_layout(cairo, layout);
     }
 

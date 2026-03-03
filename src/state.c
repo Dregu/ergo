@@ -45,8 +45,8 @@ parse_color(const char *color, uint32_t *result)
 	return true;
 }
 
-void parse_input(struct state *state, char *input, bool right) {
-    memmove(state->items[right], input, strlen(input));
+void parse_input(struct state *state, char *input, int col) {
+    memmove(state->items[col], input, strlen(input));
 }
 
 struct state *

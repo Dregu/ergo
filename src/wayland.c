@@ -73,8 +73,8 @@ void wayland_init(struct state* state)
     wl_display_roundtrip(state->wl_display);
 
     state->wl_surface = wl_compositor_create_surface(state->wl_compositor);
-    state->zwlr_layer_surface_v1 =
-        zwlr_layer_shell_v1_get_layer_surface(state->zwlr_layer_shell_v1, state->wl_surface, state->output ? state->wl_output : NULL, state->layer, "ergo");
+    state->zwlr_layer_surface_v1 = zwlr_layer_shell_v1_get_layer_surface(
+        state->zwlr_layer_shell_v1, state->wl_surface, state->output ? state->wl_output : NULL, state->layer, state->name ? state->name : "ergo");
     zwlr_layer_surface_v1_set_anchor(state->zwlr_layer_surface_v1, ZWLR_LAYER_SURFACE_V1_ANCHOR_LEFT | ZWLR_LAYER_SURFACE_V1_ANCHOR_RIGHT | state->anchor);
     zwlr_layer_surface_v1_set_size(state->zwlr_layer_surface_v1, state->width, state->height);
     zwlr_layer_surface_v1_set_exclusive_zone(state->zwlr_layer_surface_v1, state->exclusive ? state->height : -1);

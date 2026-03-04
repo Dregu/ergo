@@ -25,6 +25,7 @@ struct state
     bool output;
     int cols;
     int layer;
+    char* name;
 };
 
 struct state* state_init(int argc, char* argv[]);

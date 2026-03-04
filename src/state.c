@@ -65,21 +65,24 @@ struct state* state_init(int argc, char* argv[])
     state->font = "monospace 11";
     state->normal_bg = state->select_fg = 0x00000000;
     state->normal_fg = state->select_bg = 0xffffffff;
-    state->anchor = ZWLR_LAYER_SURFACE_V1_ANCHOR_TOP;
+    state->anchor = ZWLR_LAYER_SURFACE_V1_ANCHOR_BOTTOM;
     state->exclusive = false;
     state->cols = 3;
     state->layer = ZWLR_LAYER_SHELL_V1_LAYER_TOP;
-    const char* usage = "Usage: ergo [-beo] [-l layer 0..3] [-c ncolumns 1..9] [-f font] [-N color] [-n color] [-S color] [-s color]\n";
+    const char* usage = "Usage: ergo [-beto] [-l layer 0..3] [-c ncolumns 1..9] [-f font] [-B color] [-n namespace]\n";
     int opt;
-    while ((opt = getopt(argc, argv, "hbeof:N:n:S:s:c:l:")) != -1)
+    while ((opt = getopt(argc, argv, "hteof:c:l:b:n:")) != -1)
     {
         switch (opt)
         {
-        case 'b':
-            state->anchor = ZWLR_LAYER_SURFACE_V1_ANCHOR_BOTTOM;
+        case 't':
+            state->anchor = ZWLR_LAYER_SURFACE_V1_ANCHOR_TOP;
             break;
         case 'f':
             state->font = optarg;
+            break;
+        case 'n':
+            state->name = optarg;
             break;
         case 'e':
             state->exclusive = true;
@@ -101,28 +104,10 @@ struct state* state_init(int argc, char* argv[])
             else if (state->layer > 3)
                 state->layer = 3;
             break;
-        case 'N':
+        case 'b':
             if (!parse_color(optarg, &state->normal_bg))
             {
                 fprintf(stderr, "Invalid normal background color: %s", optarg);
-            }
-            break;
-        case 'n':
-            if (!parse_color(optarg, &state->normal_fg))
-            {
-                fprintf(stderr, "Invalid normal foreground color: %s", optarg);
-            }
-            break;
-        case 'S':
-            if (!parse_color(optarg, &state->select_bg))
-            {
-                fprintf(stderr, "Invalid select background color: %s", optarg);
-            }
-            break;
-        case 's':
-            if (!parse_color(optarg, &state->select_fg))
-            {
-                fprintf(stderr, "Invalid select foreground color: %s", optarg);
             }
             break;
         default:

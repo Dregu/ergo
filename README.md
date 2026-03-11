@@ -1,33 +1,20 @@
 # ergo
 
-A minimal status bar for Wayland compositors.
-
-## Dependencies
-
-- wayland
-- cairo
-- pango
+Fork of a minimal status bar for Wayland compositors.
 
 ## Usage
 
-Use stdin to pass text for display.
-Use `^` to highlight text (can be escaped with a slash `\^`).
+Use stdin to pass pango markup for display, prefixed by a column number and any separator. Also `ergo -h`.
 
 ### Examples
 
 ```
-while true; do echo $(date +%R); sleep 5; done | ergo -rN '3f3f3f'
+while true; do
+  echo 1,stuff on left
+  echo 2,"<span color='red'>important stuff</span>"
+  echo 3,$(date +%T)
+  sleep 1
+done | ergo -c 3
 ```
 
-```
-echo " some ^ awesome ^ text " | ergo
-```
-
-![example](public/example0.png)
-![example](public/example1.png)
-
-## Thanks
-
-- [Wayland Book](https://wayland-book.com) - code base (7.3)
-- [wmenu](https://sr.ht/~adnano/wmenu) - code examples (layer-shell, cairo, etc.)
-
+- [this thing](https://github.com/Dregu/paetkis/)

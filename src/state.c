@@ -69,7 +69,7 @@ struct state* state_init(int argc, char* argv[])
     state->exclusive = false;
     state->cols = 3;
     state->layer = ZWLR_LAYER_SHELL_V1_LAYER_TOP;
-    const char* usage = "Usage: ergo [-beto] [-l layer 0..3] [-c ncolumns 1..9] [-f font] [-B color] [-n namespace]\n";
+    const char* usage = "Usage: ergo [-e(xclusive)] [-t(op)] [-l layer 0..3] [-c ncolumns 1..9] [-f font] [-b bgcolor] [-n namespace]\n";
     int opt;
     while ((opt = getopt(argc, argv, "hteof:c:l:b:n:")) != -1)
     {

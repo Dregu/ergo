@@ -4,7 +4,7 @@ BIN ?= ergo
 VERSION ?= 0.0.5
 
 CFLAGS += $(shell pkg-config --cflags wayland-client cairo pangocairo) \
-	-Wall -Wextra -Wno-unused-parameter
+	-Wall -Wextra -Wno-unused-parameter -Wno-incompatible-pointer-types
 LDLIBS += $(shell pkg-config --libs wayland-client cairo pangocairo) -lrt
 WAYLAND_PROTOCOLS = $(shell pkg-config --variable=pkgdatadir wayland-protocols)
 

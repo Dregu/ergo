@@ -13,11 +13,31 @@
 #include "wayland.h"
 
 void wl_buffer_release(void* data, struct wl_buffer* wl_buffer)
-{
-    wl_buffer_destroy(wl_buffer);
-}
+{ wl_buffer_destroy(wl_buffer); }
 
 static const struct wl_buffer_listener wl_buffer_listener = {.release = wl_buffer_release};
+
+static void noop()
+{
+    // No-op
+}
+
+static void output_name(void* data, struct wl_output* wl_output, const char* name)
+{
+    struct state* state = data;
+    if (strcmp(name, state->output) != 0)
+        return;
+    state->wl_output = wl_output;
+}
+
+static const struct wl_output_listener output_listener = {
+    .geometry = noop,
+    .mode = noop,
+    .done = noop,
+    .scale = noop,
+    .name = output_name,
+    .description = noop,
+};
 
 static void zwlr_layer_surface_v1_configure(void* data, struct zwlr_layer_surface_v1* zwlr_layer_surface_v1, uint32_t serial, uint32_t width, uint32_t height)
 {
@@ -48,9 +68,10 @@ static void registry_global(void* data, struct wl_registry* wl_registry, uint32_
     {
         state->zwlr_layer_shell_v1 = wl_registry_bind(wl_registry, name, &zwlr_layer_shell_v1_interface, 1);
     }
-    else if (strcmp(interface, wl_output_interface.name) == 0)
+    else if (strcmp(interface, wl_output_interface.name) == 0 && state->output)
     {
-        state->wl_output = wl_registry_bind(wl_registry, name, &wl_output_interface, 4);
+        struct wl_output* output = wl_registry_bind(wl_registry, name, &wl_output_interface, 4);
+        wl_output_add_listener(output, &output_listener, state);
     }
 }
 
@@ -71,10 +92,19 @@ void wayland_init(struct state* state)
     state->wl_registry = wl_display_get_registry(state->wl_display);
     wl_registry_add_listener(state->wl_registry, &wl_registry_listener, state);
     wl_display_roundtrip(state->wl_display);
+    if (state->output)
+    {
+        wl_display_roundtrip(state->wl_display);
+        if (!state->wl_output)
+        {
+            fprintf(stderr, "Failed to find output \"%s\", using current.\n", state->output);
+            state->output = NULL;
+        }
+    }
 
     state->wl_surface = wl_compositor_create_surface(state->wl_compositor);
     state->zwlr_layer_surface_v1 = zwlr_layer_shell_v1_get_layer_surface(
-        state->zwlr_layer_shell_v1, state->wl_surface, state->output ? state->wl_output : NULL, state->layer, state->name ? state->name : "ergo");
+        state->zwlr_layer_shell_v1, state->wl_surface, state->wl_output, state->layer, state->name ? state->name : "ergo");
     zwlr_layer_surface_v1_set_anchor(state->zwlr_layer_surface_v1, ZWLR_LAYER_SURFACE_V1_ANCHOR_LEFT | ZWLR_LAYER_SURFACE_V1_ANCHOR_RIGHT | state->anchor);
     zwlr_layer_surface_v1_set_size(state->zwlr_layer_surface_v1, state->width, state->height);
     zwlr_layer_surface_v1_set_exclusive_zone(state->zwlr_layer_surface_v1, state->exclusive ? state->height : -1);

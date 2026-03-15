@@ -22,7 +22,7 @@ struct state
     char items[9][BUFSIZ * 10];
     int anchor;
     bool exclusive;
-    bool output;
+    char* output;
     int cols;
     int layer;
     char* name;

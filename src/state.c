@@ -49,14 +49,17 @@ static bool parse_color(const char* color, uint32_t* result)
 void parse_input(struct state* state, char* input)
 {
     int col = input[0] - '0' - 1;
-    if (col < 0)
-        col = 0;
-    else if (col > 8)
-        col = 8;
+    int offset = 2;
+    if (col < 0 || col > 8)
+    {
+        col = 1;
+        offset = 0;
+        state->cols = 3;
+    }
     int length = strlen(input);
     if (input[length - 1] == '\n')
         input[length - 1] = '\0';
-    memmove(state->items[col], input + 2, length - 1);
+    memmove(state->items[col], input + offset, length - 1);
 }
 
 struct state* state_init(int argc, char* argv[])
